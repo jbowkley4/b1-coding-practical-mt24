@@ -1,5 +1,5 @@
 class Controller:
-    def __innit__(self, KP:float, KD:float):
+    def __init__(self, KP, KD):
 
         self.KP=KP
         self.KD=KD
@@ -11,4 +11,4 @@ class Controller:
         input = (self.KP*error)+(self.KD*derivative)
         self.previous_error=error
         return input
-    
+        

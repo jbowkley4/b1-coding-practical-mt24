@@ -1,15 +1,17 @@
 from __future__ import annotations
 from dataclasses import dataclass
+import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from .terrain import generate_reference_and_limits
+from terrain import generate_reference_and_limits
+from control import Controller
 
 class Submarine:
     def __init__(self):
 
         self.mass = 1
         self.drag = 0.1
-        self.actuator_gain = 1
+        self.actuator_gain = 0.6 #lowered to make controller work
 
         self.dt = 1 # Time step for discrete time simulation
 
@@ -105,12 +107,12 @@ class ClosedLoop:
             observation_t = self.plant.get_depth()
         
             reference_depth=mission.reference[t]
-            inputs[t]=self.controller.compute_input(observation_t,reference_depth)
+            actions[t]=self.controller.compute_input(observation_t,reference_depth)
 
             self.plant.transition(actions[t], disturbances[t])
 
         return Trajectory(positions)
         
-    def simulate_with_random_disturbances(self, mission: Mission, variance: float = 0.5) -> Trajectory:
+    def simulate_with_random_disturbances(self, mission: Mission, variance: float = 0.3) -> Trajectory:
         disturbances = np.random.normal(0, variance, len(mission.reference))
         return self.simulate(mission, disturbances)

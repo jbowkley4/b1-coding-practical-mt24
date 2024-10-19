@@ -75,7 +75,13 @@ class Mission:
 
     @classmethod
     def from_csv(cls, file_name: str):
-        # You are required to implement this method
+        mission_data = pd.read_csv(file_name)
+        #extracting data and converting to np arrays
+        reference = mission_data['reference'].to_numpy()
+        cave_height = mission_data['cave_height'].to_numpy()
+        cave_depth = mission_data['cave_depth'].to_numpy()
+
+        return cls(reference, cave_height, cave_depth)
         pass
 
 
